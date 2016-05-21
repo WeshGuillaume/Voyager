@@ -1,35 +1,15 @@
 
 import { createHandler } from './createHandler'
 
-export const createFinder = handlers => query => {
+export const createFinder = (handlers, functions) => query => {
 
-  for (const handler of handlers) {
-    handler(query)
+  const keys = Object.keys(handlers)
+
+  for (const key of keys) {
+    const handler = handlers[key](functions)
+
+    if (handler(query)) { return }
   }
 
   throw new Error(`No handler has been found for query ${query}`)
 }
-
-export const test = () => {
-
-  const define = createHandler({
-    version: true,
-  })
-
-  const myHandler = define({
-    command: 'map',
-    description: 'Google maps',
-    exec: (query, { version }) => console.log(`Handler executed with version ${version}`) || false,
-  })
-
-  const find = createFinder([ myHandler ])
-
-  const query = { content: 'lyon paris', command: 'map' }
-
-
-  const handler = find(query)
-
-  console.log(handler(query))
-}
-
-test()

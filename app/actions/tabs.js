@@ -1,9 +1,20 @@
 
 import { createAction } from 'redux-actions'
+import { createFinder } from 'logic/exec'
+import * as handlers from './handlers'
 
-/*
- * TODO: handlers before redirection
- */
+export const exec = query => dispatch => {
+
+  const functions = {
+    redirect: url => dispatch(updateLocation(url)),
+  }
+
+  const finder = createFinder(handlers, functions)
+
+  finder(query)
+
+}
+
 export const addTab = (query, toCurrent) => (dispatch, getState) => {
 
   const add = createAction('ADD_TAB', tab => tab)
@@ -54,4 +65,9 @@ export const updateFavicon = (index, favicons) => dispatch => {
     tab => ({ ...tab, favicon: favicons[0] || null }),
     { index }
   )))
+}
+
+export const loadGoogleSearch = query => dispatch => {
+
+  dispatch(updateLocation(`https://www.google.fr/search?btnG=1&pws=0&q=${query}`))
 }

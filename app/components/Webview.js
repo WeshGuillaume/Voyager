@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { updateLocation, updateTitle, updateAddress, updateFavicon } from 'actions/tabs'
+import { updateLocation, updateTitle, updateAddress, updateFavicon, exec } from 'actions/tabs'
 import cx from 'classnames'
 
 import Like from './Like'
@@ -31,12 +31,14 @@ class Webview extends Component {
 
   back = () => {
     if (this.refs.webview.canGoBack()) {
+      console.log('going back')
       this.refs.webview.goBack()
     }
   }
 
   forward = () => {
     if (this.refs.webview.canGoForward()) {
+      console.log('going forward')
       this.refs.webview.goBack()
     }
   }
@@ -44,6 +46,7 @@ class Webview extends Component {
   submit = e => {
     const { address, dispatch } = this.props
     if (e.key === 'Enter') {
+      return dispatch(exec(address))
       dispatch(updateLocation(address))
     }
   }
@@ -62,14 +65,16 @@ class Webview extends Component {
       dispatch(updateLocation(e.url))
     })
 
-    webview.addEventListener('did-finish-load', e => {
-      const title = webview.getTitle()
-      dispatch(updateTitle(index, title))
-
+    webview.addEventListener('did-navigate', e => {
       this.setState({
         back: webview.canGoBack(),
         forward: webview.canGoForward(),
       })
+    })
+
+    webview.addEventListener('did-finish-load', e => {
+      const title = webview.getTitle()
+      dispatch(updateTitle(index, title))
     })
 
     webview.addEventListener('page-favicon-updated', e => {

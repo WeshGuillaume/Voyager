@@ -3,10 +3,10 @@ const defaults = {
   version: '0.0.1',
 }
 
-export const createHandler = permissions => description => {
+export const createHandler = (permissions, description) => actions => {
 
   const functions = Object.keys(permissions).reduce((p, c) =>
-    ({ ...p, [c]: permissions[c] ? defaults[c] || null : false }), {})
+    ({ ...p, [c]: actions[c] }), {})
 
   return Object.assign(
     query => description.exec(query, functions),
