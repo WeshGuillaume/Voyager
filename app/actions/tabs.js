@@ -9,12 +9,7 @@ export const addTab = (query, toCurrent) => (dispatch, getState) => {
   const add = createAction('ADD_TAB', tab => tab)
   const { tabs } = getState()
 
-  dispatch(add(query))
-
-  if (toCurrent) {
-    const setCurrent = createAction('SET_CURRENT_TAB', index => index)
-    dispatch(setCurrent(tabs.tabs.length - 1))
-  }
+  dispatch(add({ tab: { title: query.slice(0, 9) + '...', url: query }, toCurrent }))
 }
 
 export const updateAddress = createAction('UPDATE_ADDRESS_BAR', url => url)

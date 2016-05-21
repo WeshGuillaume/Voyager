@@ -4,22 +4,8 @@ import { createHandler } from './createHandler'
 export const createFinder = handlers => query => {
 
   for (const handler of handlers) {
-
-    if ((query.command && query.command !== handler.command) ||
-        (handler.test && !handler.test(query))) { continue }
-
-    return handler
+    handler(query)
   }
-
-  const define = createHandler({
-    search: true,
-  })
-
-  return define({
-    command: 'search',
-    description: 'Web search',
-    exec: (query, { search }) => console.log(`Searching the web for ${search}`)
-  })
 
   throw new Error(`No handler has been found for query ${query}`)
 }

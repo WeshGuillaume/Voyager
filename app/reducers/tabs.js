@@ -14,7 +14,12 @@ const initial = {
 
 export default handleActions({
 
-  ADD_TAB: (state, { payload: tab }) => ({ ...state, tabs: [ ...state.tabs, tab ] }),
+  ADD_TAB: (state, { payload: query }) => ({
+    ...state,
+    current: query.toCurrent ? state.tabs.length : state.current,
+    currentAddress: query.toCurrent ? query.tab.url : state.currentAddress,
+    tabs: [ ...state.tabs, query.tab ],
+  }),
 
   REMOVE_TAB: (state, { payload: index }) => ({
     ...state,
