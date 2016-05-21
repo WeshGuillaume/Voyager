@@ -40,6 +40,11 @@
       background-color: #fcfcfc;
       padding: 0 10px;
 
+      .ion-close-round {
+        margin-right: 11px;
+        margin-left: 2px;
+      }
+
       .title {
         text-overflow: ellipsis;
         white-space: nowrap;
