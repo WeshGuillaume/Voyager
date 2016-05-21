@@ -2,6 +2,7 @@
 .Webview {
   box-sizing: border-box;
   position: absolute;
+  z-index: 1;
   left: 0; right: 0;
   height: 100%;
   z-index: 0;

@@ -29,6 +29,10 @@ class Webview extends Component {
     this.refs.webview.reload()
   }
 
+  select = () => {
+    this.refs.input.select()
+  }
+
   back = () => {
     if (this.refs.webview.canGoBack()) {
       console.log('going back')
@@ -115,6 +119,8 @@ class Webview extends Component {
               <input
                 className={cx('input', { 'https-input': https })}
                 type='text'
+                ref='input'
+                onClick={this.select}
                 onFocus={e => this.setState({ edit: true })}
                 onBlur={e => this.setState({ edit: false })}
                 onChange={e => dispatch(updateAddress(e.target.value))}
