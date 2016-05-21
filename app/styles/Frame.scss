@@ -10,21 +10,21 @@
   .tabs {
 
 		background: linear-gradient(to left, rgba(235,235,235,1) 0%, rgba(242,242,242,1) 53%, rgba(252,252,252,1) 100%);
-    padding-left: 90px;
+    padding-left: 80px;
     background-color: #f0f0f0;
     width: 100%;
     display: flex;
     border-bottom: 1px solid #f0f0f0;
     display: flex;
     align-items: flex-end;
-    height: 36px;
+    height: 35px;
     position: relative;
     background: none;
 
     .ion-plus {
       background-color: #FFF;
-      margin-bottom: 5px;
-      margin-left: 5px;
+      margin-bottom: 3px;
+      margin-left: 8px;
       color: silver;
       cursor: pointer;
     }
@@ -38,8 +38,6 @@
       font-family: Helvetica;
       color: grey;
       font-weight: lighter;
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
       border-left: 1px solid #f0f0f0;
       border-right: 1px solid #f0f0f0;
       width: 130px;

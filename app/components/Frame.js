@@ -12,6 +12,7 @@ if (process.env.BROWSER) {
   state => ({
     tabs: state.tabs.tabs,
     current: state.tabs.current,
+    shortcut: state.shortcuts.emitter,
   })
 )
 class Frame extends Component {
@@ -26,6 +27,16 @@ class Frame extends Component {
 
   removeTab = index => e => {
     this.props.dispatch(removeTab(index))
+  }
+
+  addTab = () => {
+    this.props.dispatch(addTab('http://www.google.com'))
+  }
+
+  componentDidMount () {
+    this.props.shortcut.on('new:tab', () => {
+      this.props.dispatch(addTab('https://www.google.com'))
+    })
   }
 
   render () {
@@ -57,7 +68,7 @@ class Frame extends Component {
           })}
           <i
             className='ion-plus'
-            onClick={() => dispatch(addTab('https://google.com', true))} />
+            onClick={this.addTab} />
         </div>
       </div>
     )

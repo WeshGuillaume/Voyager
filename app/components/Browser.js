@@ -17,6 +17,10 @@ if (process.env.BROWSER) {
 )
 class Browser extends Component {
 
+  state = {
+    addressFocus: false,
+  }
+
   render () {
 
     const { current, tabs } = this.props
@@ -28,6 +32,7 @@ class Browser extends Component {
           {tabs.map((tab, index) => {
             return (
               <Webview
+                addressFocus={this.state.addressFocus}
                 src={tab.url}
                 active={current === index}
                 index={index}

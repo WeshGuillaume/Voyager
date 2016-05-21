@@ -15,6 +15,7 @@ if (process.env.BROWSER) {
     current: state.tabs.current,
     tabs: state.tabs.tabs,
     address: state.tabs.currentAddress,
+    shortcut: state.shortcuts.emitter,
   })
 )
 class Webview extends Component {
@@ -30,6 +31,7 @@ class Webview extends Component {
   }
 
   select = () => {
+    this.refs.input.focus()
     this.refs.input.select()
   }
 
@@ -57,8 +59,14 @@ class Webview extends Component {
 
   componentDidMount () {
 
-    const { index, dispatch } = this.props
+    const { index, dispatch, addressFocus, active, shortcut } = this.props
     const { webview } = this.refs
+
+    shortcut.on('address:focus', () => {
+      this.select()
+    })
+
+    if (addressFocus && active) { this.select() }
     
     webview.addEventListener('new-window', e => {
       const { ipcRenderer } = window.require('electron')

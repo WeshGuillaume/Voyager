@@ -1,13 +1,17 @@
 
 import { handleActions } from 'redux-actions'
+import { EventEmitter } from 'events'
+
+const { ipcRenderer } = window.require('electron')
 
 const initial = {
-
-  local: {},
+  emitter: new EventEmitter(),
 }
 
-export default handleActions({
+ipcRenderer.on('shortcut', (event, data) => {
+  initial.emitter.emit(data)
+})
 
-  ADD_LOCAL: (state, { payload: shtc }) => ({ ...state, local: [ ...state.local, shtc ] }),
+export default handleActions({
 
 }, initial)
