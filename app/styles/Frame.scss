@@ -29,6 +29,7 @@
 
     .tab {
 
+      cursor: default;
       height: 30px;
       bottom: 0;
       position: relative;
@@ -39,7 +40,7 @@
       border-top-right-radius: 5px;
       border-left: 1px solid #f0f0f0;
       border-right: 1px solid #f0f0f0;
-      width: 100px;
+      width: 130px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -47,11 +48,15 @@
       padding: 0 10px;
 
       .ion-close-round {
-        margin-right: 11px;
-        margin-left: 2px;
+        position: absolute;
+        font-size: 12px;
+        top: 9px;
+        right: 10px;;
       }
 
       .title {
+        color: #424242;
+        font-size: 13px;
         text-overflow: ellipsis;
         white-space: nowrap;
         display: inline-block;

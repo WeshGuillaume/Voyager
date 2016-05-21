@@ -40,16 +40,18 @@ class Frame extends Component {
             return (
               <div
                 key={index}
-                className={cx('tab', { active: index === current })} >
-                <div
                 onMouseEnter={() => this.setState({ mouseOver: index })}
-                onMouseLeave={() => this.setState({ mouseOver: null })}>
-                   {mouseOver === index && <i className='ion-close-round' onClick={this.removeTab(index)} />
-                    || tab.favicon && <img width={20} src={tab.favicon} />}
+                onMouseLeave={() => this.setState({ mouseOver: null })}
+                className={cx('tab', { active: index === current })} >
+                <div>
+                {tab.favicon && <img width={15} src={tab.favicon} />}
                 </div>
                 <span
                   onClick={_ => dispatch(setCurrent(index))}
                   className='title'>{tab.title}</span>
+                  {mouseOver === index && <i
+                    className='ion-close-round'
+                    onClick={this.removeTab(index)} />}
               </div>
             )
           })}
