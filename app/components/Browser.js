@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { removeTab } from 'actions/tabs'
 
 import Webview from 'components/Webview'
 import Frame from 'components/Frame'
@@ -13,12 +14,19 @@ if (process.env.BROWSER) {
   state => ({
     current: state.tabs.current,
     tabs: state.tabs.tabs,
+    shortcut: state.shortcuts.emitter,
   })
 )
 class Browser extends Component {
 
   state = {
     addressFocus: false,
+  }
+
+  componentDidMount () {
+    this.props.shortcut.on('remove:tab', () => {
+      this.props.dispatch(removeTab(this.props.current))
+    })
   }
 
   render () {

@@ -24,6 +24,7 @@ app.on('ready', () => {
 
     register('CommandOrControl+L', 'address:focus')
     register('CommandOrControl+T', 'new:tab')
+    register('CommandOrControl+W', 'remove:tab')
   
   })
 })

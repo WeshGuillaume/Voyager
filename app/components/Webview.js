@@ -63,7 +63,9 @@ class Webview extends Component {
     const { webview } = this.refs
 
     shortcut.on('address:focus', () => {
-      this.select()
+      if (this.refs.input) {
+        this.select()
+      }
     })
 
     if (addressFocus && active) { this.select() }

@@ -20,7 +20,9 @@ export const addTab = (query, toCurrent) => (dispatch, getState) => {
   const add = createAction('ADD_TAB', tab => tab)
   const { tabs, shortcuts } = getState()
 
-  dispatch(add({ tab: { title: query.slice(0, 9) + '...', url: query } }))
+
+  dispatch(add({ title: query.slice(0, 9) + '...', url: query } ))
+
   dispatch(setCurrent(tabs.tabs.length))
   shortcuts.emitter.emit('address:focus')
 }
