@@ -4,11 +4,11 @@ import { handleActions } from 'redux-actions'
 const initial = {
 
   current: 0,
-  currentAddress: 'https://www.google.com',
+  currentAddress: 'http://www.fapfapjs.io/',
 
   tabs: [
-    { title: 'Google', url: 'https://www.google.com' },
-    { title: 'Youtube', url: 'https://www.youtube.com' }
+    { title: 'FapFap.js', url: 0, history: [ 'http://www.fapfapjs.io/' ] },
+    { title: 'Youtube', url: 0, history: [ 'https://www.youtube.com' ] },
   ],
 }
 
@@ -53,7 +53,7 @@ export default handleActions({
 
   UPDATE_ADDRESS_BAR: (state, { payload: url }) => ({
     ...state,
-    currentAddress: url || state.tabs[state.current].url,
+    currentAddress: url || state.tabs[state.current].history[state.tabs[state.current].url],
   }),
 
   SET_CURRENT_TAB: (state, { payload: current }) => ({

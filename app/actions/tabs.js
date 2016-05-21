@@ -15,13 +15,33 @@ export const exec = query => dispatch => {
 
 }
 
+export const goBack = () => dispatch => {
+
+  const updateCurrent = createAction('UPDATE_CURRENT_TAB', updater => updater)
+  dispatch(updateCurrent(tab => ({
+    ...tab,
+    url: tab.url + 1,
+  })))
+  dispatch(updateAddress())
+}
+
+export const goForward = () => (dispatch, getState) => {
+
+  const updateCurrent = createAction('UPDATE_CURRENT_TAB', updater => updater)
+  dispatch(updateCurrent(tab => ({
+    ...tab,
+    url: tab.url ? tab.url - 1 : tab.url,
+  })))
+  dispatch(updateAddress())
+}
+
 export const addTab = (query, toCurrent) => (dispatch, getState) => {
 
   const add = createAction('ADD_TAB', tab => tab)
   const { tabs, shortcuts } = getState()
 
 
-  dispatch(add({ title: query.slice(0, 9) + '...', url: query } ))
+  dispatch(add({ title: query.slice(0, 9) + '...', url: 0, history: [ query ] } ))
 
   dispatch(setCurrent(tabs.tabs.length))
   shortcuts.emitter.emit('address:focus')
@@ -47,7 +67,12 @@ export const updateLocation = url => dispatch => {
 
   const updateCurrent = createAction('UPDATE_CURRENT_TAB', updater => updater)
 
-  dispatch(updateCurrent(tab => ({ ...tab, title: url.substr(0, 9) + '...', url })))
+  dispatch(updateCurrent(tab => ({
+    ...tab,
+    title: url.substr(0, 9) + '...',
+    url: 0,
+    history: [ url, ...tab.history ]
+  })))
   dispatch(updateAddress(url))
 }
 

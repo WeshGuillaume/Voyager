@@ -41,7 +41,7 @@ class Browser extends Component {
             return (
               <Webview
                 addressFocus={this.state.addressFocus}
-                src={tab.url}
+                src={tab.history[tab.url]}
                 active={current === index}
                 index={index}
                 key={index} />

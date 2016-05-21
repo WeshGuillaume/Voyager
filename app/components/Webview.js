@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { updateLocation, updateTitle, updateAddress, updateFavicon, exec } from 'actions/tabs'
+import { updateLocation, updateTitle, updateAddress, updateFavicon, exec, goBack, goForward } from 'actions/tabs'
 import cx from 'classnames'
 
 import Like from './Like'
@@ -26,6 +26,18 @@ class Webview extends Component {
     edit: false,
   }
 
+  canGoBack = () => {
+    const { tabs, current } = this.props
+
+    return tabs[current].url < tabs[current].history.length - 1
+  }
+
+  canGoForward = () => {
+    const { tabs, current } = this.props
+
+    return tabs[current].url > 0
+  }
+
   reload = () => {
     this.refs.webview.reload()
   }
@@ -36,16 +48,14 @@ class Webview extends Component {
   }
 
   back = () => {
-    if (this.refs.webview.canGoBack()) {
-      console.log('going back')
-      this.refs.webview.goBack()
+    if (this.canGoBack()) {
+      this.props.dispatch(goBack())
     }
   }
 
   forward = () => {
-    if (this.refs.webview.canGoForward()) {
-      console.log('going forward')
-      this.refs.webview.goBack()
+    if (this.canGoForward()) {
+      this.props.dispatch(goForward())
     }
   }
 
@@ -99,7 +109,7 @@ class Webview extends Component {
   render () {
 
     const { src, active, address, dispatch } = this.props
-    const { back, forward, edit } = this.state
+    const { edit } = this.state
 
     const https = !edit && address.indexOf('https') === 0
 
@@ -115,10 +125,10 @@ class Webview extends Component {
         <div className='toolbar'>
           <div className='back-forward'>
             <i
-              className={cx('ion-ios-arrow-back', { disabled: back })}
+              className={cx('ion-ios-arrow-back', { disabled: !this.canGoBack() })}
               onClick={this.back} />
             <i
-              className={cx('ion-ios-arrow-forward', { disabled: forward })}
+              className={cx('ion-ios-arrow-forward', { disabled: !this.canGoForward() })}
               onClick={this.forward}/>
           </div>
           <i className='ion-refresh' onClick={this.reload} />
