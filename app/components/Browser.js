@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { removeTab } from 'actions/tabs'
+import { removeTab, goLeft, goRight } from 'actions/tabs'
 
 import Webview from 'components/Webview'
 import Frame from 'components/Frame'
@@ -24,9 +24,13 @@ class Browser extends Component {
   }
 
   componentDidMount () {
-    this.props.shortcut.on('remove:tab', () => {
-      this.props.dispatch(removeTab(this.props.current))
-    })
+
+    const { shortcut, dispatch } = this.props
+
+    shortcut.on('remove:tab', () => dispatch(removeTab(current)))
+    shortcut.on('tab:left', () => dispatch(goLeft()))
+    shortcut.on('tab:right', () => dispatch(goRight()))
+
   }
 
   render () {

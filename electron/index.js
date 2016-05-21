@@ -25,7 +25,13 @@ app.on('ready', () => {
     register('CommandOrControl+L', 'address:focus')
     register('CommandOrControl+T', 'new:tab')
     register('CommandOrControl+W', 'remove:tab')
+    register('CommandOrControl+Alt+Left', 'tab:left')
+    register('CommandOrControl+Alt+Right', 'tab:right')
   
+  })
+
+  window.on('blur', () => {
+    globalShortcut.unregisterAll()
   })
 })
 

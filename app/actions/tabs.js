@@ -25,6 +25,24 @@ export const goBack = () => dispatch => {
   dispatch(updateAddress())
 }
 
+export const goRight = () => (dispatch, getState) => {
+
+  const { tabs } = getState()
+  const { tabs: list, current } = tabs
+
+  const next = current === list.length - 1 ? 0 : current + 1
+  dispatch(setCurrent(next))
+}
+
+export const goLeft = () => (dispatch, getState) => {
+
+  const { tabs } = getState()
+  const { tabs: list, current } = tabs
+
+  const next = current === 0 ? list.length - 1 : current - 1
+  dispatch(setCurrent(next))
+}
+
 export const goForward = () => (dispatch, getState) => {
 
   const updateCurrent = createAction('UPDATE_CURRENT_TAB', updater => updater)
@@ -61,6 +79,7 @@ export const removeTab = index => dispatch => {
   const remove = createAction('REMOVE_TAB', index => index)
 
   dispatch(remove(index))
+  dispatch(updateAddress())
 }
 
 export const updateLocation = url => dispatch => {
