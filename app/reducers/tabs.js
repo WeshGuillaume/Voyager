@@ -21,7 +21,8 @@ export default handleActions({
     tabs: [
       ...state.tabs.slice(0, index),
       ...state.tabs.slice(index + 1),
-    ]
+    ],
+    current: 0,
   }),
 
   UPDATE_CURRENT_TAB: (state, { payload: updater }) => ({

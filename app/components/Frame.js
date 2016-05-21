@@ -42,11 +42,12 @@ class Frame extends Component {
                 key={index}
                 onMouseEnter={() => this.setState({ mouseOver: index })}
                 onMouseLeave={() => this.setState({ mouseOver: null })}
-                onClick={_ => dispatch(setCurrent(index))}
                 className={cx('tab', { active: index === current })} >
                  {mouseOver === index && <i className='ion-close-round' onClick={this.removeTab(index)} />
                   || tab.favicon && <img width={20} src={tab.favicon} />}
-                <span className='title'>{tab.title}</span>
+                <span
+                  onClick={_ => dispatch(setCurrent(index))}
+                  className='title'>{tab.title}</span>
               </div>
             )
           })}
