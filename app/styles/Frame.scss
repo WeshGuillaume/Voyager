@@ -14,18 +14,24 @@
     display: flex;
     border-bottom: 1px solid #f0f0f0;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    height: 36px;
+    position: relative;
+    background: none;
 
     .ion-plus {
-      height: 100%;
-      margin-left: 10px;
+      background-color: #FFF;
+      margin-bottom: 5px;
+      margin-left: 5px;
       color: silver;
       cursor: pointer;
     }
 
     .tab {
 
-      height: 35px;
+      height: 30px;
+      bottom: 0;
+      position: relative;
       font-family: Helvetica;
       color: grey;
       font-weight: lighter;
@@ -53,6 +59,7 @@
       }
 
       img {
+        margin-top: 3px;
         margin-right: 5px;
       }
 
