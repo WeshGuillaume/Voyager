@@ -19,14 +19,19 @@ export default handleActions({
     tabs: [ ...state.tabs, tab ],
   }),
 
-  REMOVE_TAB: (state, { payload: index }) => ({
-    ...state,
-    tabs: [
+  REMOVE_TAB: (state, { payload: index }) => {
+
+    const tabs = [
       ...state.tabs.slice(0, index),
       ...state.tabs.slice(index + 1),
-    ],
-    current: state.current ? state.current - 1 : 0,
-  }),
+    ]
+
+    const current = state.current === 0 ? 0 :
+      state.current === tabs.length ? state.current - 1 :
+        state.current
+
+    return ({ ...state, tabs, current })
+  },
 
   UPDATE_CURRENT_TAB: (state, { payload: updater }) => ({
     ...state,
