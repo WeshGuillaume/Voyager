@@ -3,8 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { updateLocation, updateTitle, updateAddress, updateFavicon, exec, goBack, goForward } from 'actions/tabs'
 import cx from 'classnames'
-
-import Like from './Like'
+import AddressBar from './AddressBar'
 
 if (process.env.BROWSER) {
   require('../styles/Webview.scss')
@@ -23,7 +22,6 @@ class Webview extends Component {
   state = {
     back: false,
     forward: true,
-    edit: false,
   }
 
   canGoBack = () => {
@@ -42,11 +40,6 @@ class Webview extends Component {
     this.refs.webview.reload()
   }
 
-  select = () => {
-    this.refs.input.focus()
-    this.refs.input.select()
-  }
-
   back = () => {
     if (this.canGoBack()) {
       this.props.dispatch(goBack())
@@ -59,27 +52,11 @@ class Webview extends Component {
     }
   }
 
-  submit = e => {
-    const { address, dispatch } = this.props
-    if (e.key === 'Enter') {
-      return dispatch(exec(address))
-      dispatch(updateLocation(address))
-    }
-  }
-
   componentDidMount () {
 
-    const { index, dispatch, addressFocus, active, shortcut } = this.props
+    const { index, dispatch, active, shortcut } = this.props
     const { webview } = this.refs
 
-    shortcut.on('address:focus', () => {
-      if (this.refs.input) {
-        this.select()
-      }
-    })
-
-    if (addressFocus && active) { this.select() }
-    
     webview.addEventListener('new-window', e => {
       const { ipcRenderer } = window.require('electron')
       ipcRenderer.send('popup', e.url)
@@ -108,17 +85,7 @@ class Webview extends Component {
 
   render () {
 
-    const { src, active, address, dispatch } = this.props
-    const { edit } = this.state
-
-    const https = !edit && address.indexOf('https') === 0
-
-    const formattedAddress =
-      !edit ?
-      address
-        .replace('https://', '')
-        .replace('http://', '') :
-      address
+    const { src, current, tabs, shortcut, active, address, addressFocus, dispatch } = this.props
 
     return (
       <div className={cx('Webview', { active })}>
@@ -132,22 +99,13 @@ class Webview extends Component {
               onClick={this.forward}/>
           </div>
           <i className='ion-refresh' onClick={this.reload} />
-          <div className='address'>
-            <Like />
-            <div className='input-content'>
-              <span className='https'>{https ? 'https://' : ''}</span>
-              <input
-                className={cx('input', { 'https-input': https })}
-                type='text'
-                ref='input'
-                onClick={this.select}
-                onFocus={e => this.setState({ edit: true })}
-                onBlur={e => this.setState({ edit: false })}
-                onChange={e => dispatch(updateAddress(e.target.value))}
-                onKeyPress={this.submit}
-                value={formattedAddress} />
-            </div>
-          </div>
+          <AddressBar
+            address={address}
+            addressFocus={addressFocus}
+            active={active}
+            current={current}
+            tabs={tabs}
+            shortcut={shortcut} />
         </div>
       <webview
         className='webview-element'

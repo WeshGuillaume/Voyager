@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { setCurrent, updateFavicon, addTab, removeTab } from 'actions/tabs'
+import { setCurrent, updateFavicon, addTab, removeCurrent, removeTab, goLeft, goRight } from 'actions/tabs'
 
 if (process.env.BROWSER) {
   require('styles/Frame.scss')
@@ -34,9 +34,13 @@ class Frame extends Component {
   }
 
   componentDidMount () {
-    this.props.shortcut.on('new:tab', () => {
-      this.props.dispatch(addTab('https://www.google.com'))
-    })
+    const { shortcut, dispatch, current } = this.props
+
+    shortcut.on('remove:tab', () => dispatch(removeCurrent()))
+    shortcut.on('tab:left', () => dispatch(goLeft()))
+    shortcut.on('tab:right', () => dispatch(goRight()))
+    shortcut.on('new:tab', () => dispatch(addTab('https://www.google.com')))
+
   }
 
   render () {

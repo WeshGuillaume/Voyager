@@ -26,11 +26,7 @@ export default handleActions({
       ...state.tabs.slice(index + 1),
     ]
 
-    const current = state.current === 0 ? 0 :
-      state.current === tabs.length ? state.current - 1 :
-        state.current
-
-    return ({ ...state, tabs, current })
+    return ({ ...state, tabs })
   },
 
   UPDATE_CURRENT_TAB: (state, { payload: updater }) => ({

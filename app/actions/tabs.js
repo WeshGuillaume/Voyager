@@ -67,19 +67,32 @@ export const addTab = (query, toCurrent) => (dispatch, getState) => {
 
 export const updateAddress = createAction('UPDATE_ADDRESS_BAR', url => url)
 
-export const setCurrent = index => dispatch => {
+export const setCurrent = index => (dispatch, getState) => {
 
   const setCurrentTab = createAction('SET_CURRENT_TAB', index => index)
 
   dispatch(setCurrentTab(index))
+
   dispatch(updateAddress())
 }
 
-export const removeTab = index => dispatch => {
+export const removeTab = index => (dispatch, getState) => {
+
   const remove = createAction('REMOVE_TAB', index => index)
+  const { tabs } = getState()
+
+  if (tabs.current === 0) { dispatch(setCurrent(0)) }
+  else if (tabs.current === tabs.length - 1) { dispatch(setCurrent(tabs.length - 2)) }
+  else { dispatch(setCurrent(tabs.current - 1)) }
 
   dispatch(remove(index))
   dispatch(updateAddress())
+}
+
+export const removeCurrent = () => (dispatch, getState) => {
+
+  const { tabs } = getState()
+  dispatch(removeTab(tabs.current))
 }
 
 export const updateLocation = url => dispatch => {
@@ -113,9 +126,4 @@ export const updateFavicon = (index, favicons) => dispatch => {
     tab => ({ ...tab, favicon: favicons[0] || null }),
     { index }
   )))
-}
-
-export const loadGoogleSearch = query => dispatch => {
-
-  dispatch(updateLocation(`https://www.google.fr/search?btnG=1&pws=0&q=${query}`))
 }

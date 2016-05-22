@@ -23,16 +23,6 @@ class Browser extends Component {
     addressFocus: false,
   }
 
-  componentDidMount () {
-
-    const { shortcut, dispatch } = this.props
-
-    shortcut.on('remove:tab', () => dispatch(removeTab(current)))
-    shortcut.on('tab:left', () => dispatch(goLeft()))
-    shortcut.on('tab:right', () => dispatch(goRight()))
-
-  }
-
   render () {
 
     const { current, tabs } = this.props
