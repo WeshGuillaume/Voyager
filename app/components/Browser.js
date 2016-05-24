@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { removeTab, goLeft, goRight } from 'actions/tabs'
 
-import Webview from 'components/Webview'
+import Content from 'components/Content'
 import Frame from 'components/Frame'
 
 if (process.env.BROWSER) {
@@ -33,7 +33,7 @@ class Browser extends Component {
         <div className='web-wrapper'>
           {tabs.map((tab, index) => {
             return (
-              <Webview
+              <Content
                 addressFocus={this.state.addressFocus}
                 src={tab.history[tab.url]}
                 active={current === index}

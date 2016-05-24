@@ -1,120 +1,79 @@
 
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { updateLocation, updateTitle, updateAddress, updateFavicon, exec, goBack, goForward } from 'actions/tabs'
-import cx from 'classnames'
-import AddressBar from './AddressBar'
 
-if (process.env.BROWSER) {
-  require('../styles/Webview.scss')
-}
-
-@connect(
-  state => ({
-    current: state.tabs.current,
-    tabs: state.tabs.tabs,
-    address: state.tabs.currentAddress,
-    shortcut: state.shortcuts.emitter,
-  })
-)
 class Webview extends Component {
 
-  state = {
-    back: false,
-    forward: true,
-  }
-
-  canGoBack = () => {
-    const { tabs, current } = this.props
-
-    return tabs[current].url < tabs[current].history.length - 1
-  }
-
-  canGoForward = () => {
-    const { tabs, current } = this.props
-
-    return tabs[current].url > 0
-  }
-
-  reload = () => {
-    this.refs.webview.reload()
-  }
-
-  back = () => {
-    if (this.canGoBack()) {
-      this.props.dispatch(goBack())
-    }
-  }
-
-  forward = () => {
-    if (this.canGoForward()) {
-      this.props.dispatch(goForward())
-    }
+  static propTypes = {
+    src: React.PropTypes.string.isRequired,
+    className: React.PropTypes.string,
+    onNewWindow: React.PropTypes.func,
+    onClickedLink: React.PropTypes.func,
+    onDidClickLink: React.PropTypes.func,
+    onDidFinishLoad: React.PropTypes.func,
+    onFaviconUpdate: React.PropTypes.func,
   }
 
   componentDidMount () {
+  
+    const {
+      onNewWindow,
+      onClickedLink,
+      onDidClickLink,
+      onDidFinishLoad,
+      onFaviconUpdate,
+    } = this.props
 
-    const { index, dispatch, active, shortcut } = this.props
     const { webview } = this.refs
 
-    webview.addEventListener('new-window', e => {
-      const { ipcRenderer } = window.require('electron')
-      console.log(e.disposition)
-      ipcRenderer.send('popup', e.url)
-    })
+    this.reload = () => webview.reload()
+    this.loaded = e => onDidFinishLoad && onDidFinishLoad({ e, title: webview.getTitle() })
 
-    webview.addEventListener('will-navigate', e => {
-      dispatch(updateLocation(e.url))
-    })
+    onNewWindow && webview.addEventListener('new-window', onNewWindow)
+    onClickedLink && webview.addEventListener('will-navigate', onClickedLink)
+    onDidClickLink && webview.addEventListener('did-navigate', onDidClickLink)
+    onFaviconUpdate && webview.addEventListener('page-favicon-updated', onFaviconUpdate)
+    onDidFinishLoad && webview.addEventListener('did-finish-load', this.loaded)
+  }
 
-    webview.addEventListener('did-navigate', e => {
-      this.setState({
-        back: webview.canGoBack(),
-        forward: webview.canGoForward(),
-      })
-    })
+  componentWillUnmount () {
+  
+    const {
+      onNewWindow,
+      onClickedLink,
+      onDidClickLink,
+      onFaviconUpdate,
+    } = this.props
 
-    webview.addEventListener('did-finish-load', e => {
-      const title = webview.getTitle()
-      dispatch(updateTitle(index, title))
-    })
+    const { webview } = this.refs
 
-    webview.addEventListener('page-favicon-updated', e => {
-      dispatch(updateFavicon(index, e.favicons))
-    })
+    onNewWindow && webview.removeEventListener('new-window', onNewWindow)
+    onClickedLink && webview.removeEventListener('will-navigate', onClickedLink)
+    onDidClickLink && webview.removeEventListener('did-navigate', onDidClickLink)
+    onFaviconUpdate && webview.removeEventListener('page-favicon-updated', onFaviconUpdate)
+    webview.removeEventListener('did-finish-load', this.loaded)
+  }
+
+  shouldComponentUpdate (nextP, nextS) {
+    if (nextP.src === this.props.src) { return false }
+    return true
   }
 
   render () {
 
-    const { src, current, tabs, shortcut, active, address, addressFocus, dispatch } = this.props
+    const {
+      className,
+      src,
+    } = this.props
+
+    console.log(`Rendering ${src}`)
 
     return (
-      <div className={cx('Webview', { active })}>
-        <div className='toolbar'>
-          <div className='back-forward'>
-            <i
-              className={cx('ion-ios-arrow-back', { disabled: !this.canGoBack() })}
-              onClick={this.back} />
-            <i
-              className={cx('ion-ios-arrow-forward', { disabled: !this.canGoForward() })}
-              onClick={this.forward}/>
-          </div>
-          <i className='ion-refresh' onClick={this.reload} />
-          <AddressBar
-            address={address}
-            addressFocus={addressFocus}
-            active={active}
-            current={current}
-            tabs={tabs}
-            shortcut={shortcut} />
-        </div>
       <webview
-        className='webview-element'
+        className={className}
         ref='webview'
         src={src}
         plugins
         allowpopups />
-      </div>
     )
   }
 }

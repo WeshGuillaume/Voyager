@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 
 import * as reducers from '../reducers'
-import Browser from '../components/Browser'
+import Browser from 'components/Browser'
 
 const createStoreWithMiddlewares = applyMiddleware(thunk)(createStore)
 const reducer = combineReducers(reducers)
