@@ -99,13 +99,13 @@ export const updateLocation = url => dispatch => {
 
   const updateCurrent = createAction('UPDATE_CURRENT_TAB', updater => updater)
 
+  dispatch(updateAddress(url))
   dispatch(updateCurrent(tab => ({
     ...tab,
     title: url.substr(0, 9) + '...',
     url: 0,
     history: [ url, ...tab.history ]
   })))
-  dispatch(updateAddress(url))
 }
 
 export const updateTitle = (index, title) => dispatch => {

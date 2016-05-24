@@ -59,6 +59,7 @@ class Webview extends Component {
 
     webview.addEventListener('new-window', e => {
       const { ipcRenderer } = window.require('electron')
+      console.log(e.disposition)
       ipcRenderer.send('popup', e.url)
     })
 

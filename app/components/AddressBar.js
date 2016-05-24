@@ -47,6 +47,7 @@ class AddressBar extends Component {
   submit = e => {
     const { address, dispatch } = this.props
     if (e.key === 'Enter') {
+      this.setState({ edit: false })
       return dispatch(exec(address))
     }
   }
