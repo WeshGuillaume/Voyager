@@ -98,7 +98,10 @@ class AddressBar extends Component {
             onKeyPress={this.submit}
             value={formattedAddress || ''} />
         </div>
-        <Autocomplete edit={edit} suggestions={suggestions} />
+        <Autocomplete
+          edit={edit}
+          suggestions={formattedAddress ? [ formattedAddress, ...suggestions ] : suggestions}
+          onSelect={value => console.log(`Got ${value}`)} />
       </div>
     )
   }

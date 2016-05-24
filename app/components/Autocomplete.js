@@ -9,13 +9,13 @@ if (process.env.BROWSER) {
 
 @connect(
   state => ({
-    autocompleteCursor: state.autocomplete.cursor,
     shortcut: state.shortcuts.emitter,
   })
 )
 class Autocomplete extends Component {
 
   state = {
+    opened: false,
     active: 0,
   }
 
@@ -27,12 +27,20 @@ class Autocomplete extends Component {
     const { shortcut } = this.props
   
     shortcut.on('up', () => {
-      const { suggestions } = this.props
+      const { suggestions, onChange } = this.props
       const { active } = this.state
 
       this.setState({
         active: active === 0 ? suggestions.length - 1 : active - 1,
       })
+    })
+
+    shortcut.on('enter', () => {
+      
+      const { active } = this.state
+      const { onSelect, suggestions } = this.props
+      
+      onSelect(suggestions[active])
     })
 
     shortcut.on('down', () => {
@@ -47,7 +55,7 @@ class Autocomplete extends Component {
 
   render () {
 
-    const { suggestions, edit } = this.props
+    const { suggestions, edit, onSelect } = this.props
     const { active } = this.state
   
     return (
@@ -57,7 +65,8 @@ class Autocomplete extends Component {
             <div
               key={key}
               className={cx('item', { active: active === key })}
-              onMouseEnter={this.setActive(key)}>
+              onMouseEnter={this.setActive(key)}
+              onClick={() => onSelect(suggestions[key])}>
               <span>{s}</span>
             </div>
           )
