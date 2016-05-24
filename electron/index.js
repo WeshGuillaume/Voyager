@@ -27,6 +27,8 @@ app.on('ready', () => {
     register('CommandOrControl+W', 'remove:tab')
     register('CommandOrControl+Alt+Left', 'tab:left')
     register('CommandOrControl+Alt+Right', 'tab:right')
+    register('Up', 'up')
+    register('Down', 'down')
   
   })
 

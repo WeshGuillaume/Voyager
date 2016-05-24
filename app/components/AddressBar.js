@@ -7,6 +7,7 @@ import { updateAddress, exec} from 'actions/tabs'
 import { updateSuggestions, emptySuggestions } from 'actions/autocomplete'
 
 import Like from './Like'
+import Autocomplete from './Autocomplete'
 
 if (process.env.BROWSER) {
   require('styles/AddressBar.scss')
@@ -15,9 +16,9 @@ if (process.env.BROWSER) {
 @connect(
   state => ({
     suggestions: state.autocomplete.suggestions,
-    //currentURL: state.tabs.tabs[state.tabs.current].history[state.tabs.current].url,
     tabs: state.tabs.tabs,
     current: state.tabs.current,
+    shortcut: state.shortcuts.emitter,
   })
 )
 class AddressBar extends Component {
@@ -97,15 +98,7 @@ class AddressBar extends Component {
             onKeyPress={this.submit}
             value={formattedAddress || ''} />
         </div>
-          <div className='autocomplete'>
-            {edit && suggestions.map((s, key) => {
-              return (
-                <div key={key} className='item'>
-                  <span>{s}</span>
-                </div>
-              )
-            })}
-          </div>
+        <Autocomplete edit={edit} suggestions={suggestions} />
       </div>
     )
   }
