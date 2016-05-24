@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 
 import { updateAddress, exec} from 'actions/tabs'
+import { updateSuggestions, emptySuggestions } from 'actions/autocomplete'
 
 import Like from './Like'
 
@@ -11,7 +12,14 @@ if (process.env.BROWSER) {
   require('styles/AddressBar.scss')
 }
 
-@connect()
+@connect(
+  state => ({
+    suggestions: state.autocomplete.suggestions,
+    //currentURL: state.tabs.tabs[state.tabs.current].history[state.tabs.current].url,
+    tabs: state.tabs.tabs,
+    current: state.tabs.current,
+  })
+)
 class AddressBar extends Component {
 
   state = {
@@ -21,6 +29,19 @@ class AddressBar extends Component {
   select = () => {
     this.refs.input.focus()
     this.refs.input.select()
+  }
+
+  onChange = e => {
+    const { value } = e.target
+    const { dispatch } = this.props
+
+    dispatch(updateAddress(value))
+
+    if (value) {
+      return dispatch(updateSuggestions(value))
+    }
+
+    dispatch(emptySuggestions())
   }
 
   submit = e => {
@@ -35,7 +56,7 @@ class AddressBar extends Component {
     const { active, addressFocus, shortcut } = this.props
 
     shortcut.on('address:focus', () => {
-      if (this.refs.input) {
+      if (this.refs.input && active) {
         this.select()
       }
     })
@@ -46,14 +67,15 @@ class AddressBar extends Component {
 
   render () {
 
-    const { address, dispatch } = this.props
+    const { address, dispatch, suggestions, current, tabs } = this.props
     const { edit } = this.state
 
-    const https = !edit && address.indexOf('https') === 0
+    const formattedCurrent = tabs[current].history[tabs[current].url]
+    const https = !edit && formattedCurrent.indexOf('https') === 0
   
     const formattedAddress =
       !edit ?
-      address
+        formattedCurrent
         .replace('https://', '')
         .replace('http://', '') :
       address
@@ -70,10 +92,19 @@ class AddressBar extends Component {
             onClick={this.select}
             onFocus={e => this.setState({ edit: true })}
             onBlur={e => this.setState({ edit: false })}
-            onChange={e => dispatch(updateAddress(e.target.value))}
+            onChange={this.onChange}
             onKeyPress={this.submit}
-            value={formattedAddress} />
+            value={formattedAddress || ''} />
         </div>
+          <div className='autocomplete'>
+            {edit && suggestions.map((s, key) => {
+              return (
+                <div key={key} className='item'>
+                  <span>{s}</span>
+                </div>
+              )
+            })}
+          </div>
       </div>
     )
   }

@@ -7,6 +7,10 @@ export const urlHandler = createHandler({
   name: 'URL handler',
   exec (query, { redirect }) {
 
+    if (query.trim().indexOf('localhost') > -1) {
+      return redirect(query)
+    }
+
     if (query
         .trim()
         .replace(/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/, '')

@@ -49,7 +49,7 @@ export default handleActions({
 
   UPDATE_ADDRESS_BAR: (state, { payload: url }) => ({
     ...state,
-    currentAddress: url || state.tabs[state.current].history[state.tabs[state.current].url],
+    currentAddress: url ,//!== undefined && url || state.tabs[state.current].history[state.tabs[state.current].url],
   }),
 
   SET_CURRENT_TAB: (state, { payload: current }) => ({

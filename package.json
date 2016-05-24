@@ -23,7 +23,9 @@
     "react-router": "^2.4.1",
     "redux": "^3.5.2",
     "redux-actions": "^0.9.1",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "superagent": "^2.0.0-alpha.3",
+    "superagent-jsonp": "0.0.7"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
