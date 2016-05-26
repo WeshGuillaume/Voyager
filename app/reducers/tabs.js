@@ -16,7 +16,7 @@ export default handleActions({
 
   ADD_TAB: (state, { payload: tab }) => ({
     ...state,
-    tabs: [ ...state.tabs, tab ],
+    tabs: [ ...state.tabs, { ...tab, key: Date.now() } ],
   }),
 
   REMOVE_TAB: (state, { payload: index }) => {

@@ -21,6 +21,12 @@ class Browser extends Component {
 
   state = {
     addressFocus: false,
+    keys: []
+  }
+
+  componentWillReceiveProps ({ tabs }) {
+  
+    this.setState({ keys: tabs.map(e => Date.now()) })
   }
 
   render () {
@@ -38,7 +44,7 @@ class Browser extends Component {
                 src={tab.history[tab.url]}
                 active={current === index}
                 index={index}
-                key={index} />
+                key={tab.key + tab.history[tab.url]} />
             )
           })}
         </div>

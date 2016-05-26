@@ -19,6 +19,10 @@ class Autocomplete extends Component {
     active: 0,
   }
 
+  log (e) {
+    console.log(e)
+  }
+
   setActive = index => () => {
     this.setState({ active: index })
   }

@@ -1,14 +1,21 @@
 import React, { Component } from 'react'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { compose, createStore, applyMiddleware, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
+import Devtools from '../dev'
 
 import * as reducers from '../reducers'
 import Browser from 'components/Browser'
+import Address from './Address'
 
-const createStoreWithMiddlewares = applyMiddleware(thunk)(createStore)
+const createStoreWithMiddlewares = compose(applyMiddleware(thunk), Devtools.instrument())(createStore)
 const reducer = combineReducers(reducers)
 const store = createStoreWithMiddlewares(reducer)
+
+if (module.hot) {
+    module.hot.accept('../reducers', () =>
+    store.replaceReducer(require('../reducers')))
+}
 
 class Main extends Component {
 
@@ -16,7 +23,15 @@ class Main extends Component {
   
     return (
       <Provider store={store}>
-        <Browser />
+        <div style={{
+          width: '100vw',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Address />
+        </div>
       </Provider>
     )
   }

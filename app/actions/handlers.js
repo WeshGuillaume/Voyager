@@ -1,15 +1,26 @@
 
 import { createHandler } from 'logic/createHandler'
 
+export const localhost = createHandler({
+  redirect: true,
+}, {
+  name: 'Localhost',
+  exec (query, { redirect }) {
+
+    if (!query.indexOf('localhost') === 0) {
+      return false
+    }
+
+    redirect(query)
+    return true
+  }
+})
+
 export const urlHandler = createHandler({
   redirect: true,
 }, {
   name: 'URL handler',
   exec (query, { redirect }) {
-
-    if (query.trim().indexOf('localhost') > -1) {
-      return redirect(query)
-    }
 
     if (query
         .trim()

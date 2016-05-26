@@ -35,6 +35,7 @@ class Content extends Component {
   }
 
   reload = () => {
+    console.log('hey')
     this.refs.webview.reload()
   }
 
@@ -98,14 +99,14 @@ class Content extends Component {
             tabs={tabs}
             shortcut={shortcut} />
         </div>
-      <Webview
-        className='webview-element'
-        ref='webview'
-        src={src}
-        onNewWindow={this.newWindow}
-        onClickedLink={this.clickedLink}
-        onDidFinishLoad={this.didFinishLoad}
-        onFaviconUpdate={this.onFaviconUpdate} />
+        <Webview
+          className='webview-element'
+          ref='webview'
+          src={src}
+          onNewWindow={this.newWindow}
+          onClickedLink={this.clickedLink}
+          onDidFinishLoad={this.didFinishLoad}
+          onFaviconUpdate={this.onFaviconUpdate} />
       </div>
     )
   }

@@ -6,6 +6,7 @@ import cx from 'classnames'
 import { updateAddress, exec} from 'actions/tabs'
 import { updateSuggestions, emptySuggestions } from 'actions/autocomplete'
 
+import Input from './Input'
 import Like from './Like'
 import Autocomplete from './Autocomplete'
 
@@ -87,21 +88,10 @@ class AddressBar extends Component {
         <Like />
         <div className='input-content'>
           <span className='https'>{https ? 'https://' : ''}</span>
-          <input
-            className={cx('input', { 'https-input': https })}
-            type='text'
-            ref='input'
-            onClick={this.select}
-            onFocus={e => this.setState({ edit: true })}
-            onBlur={e => this.setState({ edit: false })}
-            onChange={this.onChange}
-            onKeyPress={this.submit}
-            value={formattedAddress || ''} />
+          <Input
+            suggestions={suggestions}
+            onChange={value => dispatch(updateSuggestions(value))} />
         </div>
-        <Autocomplete
-          edit={edit}
-          suggestions={formattedAddress ? [ formattedAddress, ...suggestions ] : suggestions}
-          onSelect={value => console.log(`Got ${value}`)} />
       </div>
     )
   }
