@@ -63,7 +63,7 @@ class Address extends Component {
 
   setInactive = () => {
     const { inactiveValue } = this.props
-    this.setState({ inputValue: inactiveValue, empty: true })
+    this.setState({ inputValue: inactiveValue, empty: true, active: 0 })
   }
 
   componentDidMount () {
