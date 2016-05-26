@@ -10,10 +10,10 @@ class Suggestions extends Component {
 
   render () {
   
-    const { list, active } = this.props
+    const { list, active, className = '' } = this.props
 
     return (
-      <div className='Suggestions'>
+      <div className={`Suggestions ${className}`}>
         {list && list.map((item, index) => {
           return (
             <div

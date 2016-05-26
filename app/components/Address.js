@@ -11,18 +11,14 @@ if (process.env.BROWSER) {
 class Address extends Component {
 
   state = {
-    suggestions: [],
     active: 0,
     inputValue: '',
     empty: true,
   }
 
-  getSuggestions (value) {
-    return [ 'guillaume', 'nicolas', 'arnaud' ]
-  }
-
   handleKey = e => {
-    const { active, suggestions } = this.state
+    const { active } = this.state
+    const { suggestions } = this.props
 
     if (e.key === 'ArrowUp') {
 
@@ -53,32 +49,33 @@ class Address extends Component {
 
   onInputChange = value => {
 
+    const { onChange } = this.props
+
     if (!value) { return this.setState({ empty: true, inputValue: value }) }
 
     this.setState({
-      suggestions: this.getSuggestions(value),
       empty: false,
       inputValue: value,
     })
-  }
 
-  componentWillMount () {
-    this.setState({ suggestions: this.getSuggestions('') })
+    onChange(value)
   }
 
   render () {
 
-    const { suggestions, active, empty } = this.state
-    const { inputValue } = this.state
+    const { active, empty, inputValue } = this.state
+    const { inputClassName, suggestionsClassName, suggestions } = this.props
 
     return (
       <div className='Address'>
         <Input
+          className={inputClassName}
           value={inputValue}
           complete={suggestions[0]}
           onKeyDown={this.handleKey}
           onChange={this.onInputChange} />
           {!empty && <Suggestions
+            className={suggestionsClassName}
             active={active}
             list={suggestions}/>}
       </div>

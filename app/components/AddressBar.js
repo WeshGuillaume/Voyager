@@ -9,6 +9,7 @@ import { updateSuggestions, emptySuggestions } from 'actions/autocomplete'
 import Input from './Input'
 import Like from './Like'
 import Autocomplete from './Autocomplete'
+import Address from './Address'
 
 if (process.env.BROWSER) {
   require('styles/AddressBar.scss')
@@ -83,14 +84,24 @@ class AddressBar extends Component {
         .replace('http://', '') :
       address
 
+      /*
+       *
+          <span className='https'>{https ? 'https://' : ''}</span>
+          <Input
+            suggestions={suggestions}
+            onChange={value => dispatch(updateSuggestions(value))} />
+       */
+
     return (
       <div className='AddressBar'>
         <Like />
         <div className='input-content'>
           <span className='https'>{https ? 'https://' : ''}</span>
-          <Input
+          <Address
+            inputClassName='Input'
+            suggestionsClassName='Suggestions'
             suggestions={suggestions}
-            onChange={value => dispatch(updateSuggestions(value))} />
+            onChange={value => dispatch(updateSuggestions(value))}/>
         </div>
       </div>
     )

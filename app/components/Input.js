@@ -12,9 +12,12 @@ class Input extends Component {
     left: null,
   }
 
-  addComplete = input => {
+  addComplete = e => {
     const { complete, completeDidMatch = v => v, onEmpty } = this.props
+    const input = e.target
     const { value } = input
+
+    if (value === this.props.value) { return this.setState({ left: null }) }
 
     if (complete === value) {
       this.setState({ left: null })
@@ -23,9 +26,7 @@ class Input extends Component {
 
     const left = complete.substr(value.length, complete.length)
 
-    this.setState({
-      left,
-    })
+    this.setState({ left })
 
     setTimeout(() => {
       input.focus()
@@ -36,15 +37,15 @@ class Input extends Component {
   /*
    * TODO: escape regexes
    */
-  handleCaret = ({ target }) => {
+  handleCaret = e => {
 
     const { onChange, complete, completeDidntMatch = v => 0 } = this.props
-    const { value } = target
+    const { value } = e.target
 
     onChange(value)
 
     if (complete && value && value.length && !complete.indexOf(value)) {
-      this.addComplete(target)
+      this.addComplete(e)
     } else {
       this.setState({ shouldComplete: false, left: null })
     }
@@ -67,12 +68,12 @@ class Input extends Component {
 
   render () {
 
-    const { onKeyDown, value } = this.props
+    const { onKeyDown, value, className = '' } = this.props
     const { left } = this.state
 
     return (
       <input
-        className='Input'
+        className={`Input ${className}`}
         ref='input'
         type='search'
         value={value + (left || '')}
