@@ -61,15 +61,25 @@ class Address extends Component {
     onChange(value)
   }
 
+  setInactive = () => {
+    const { inactiveValue } = this.props
+    this.setState({ inputValue: inactiveValue, empty: true })
+  }
+
+  componentDidMount () {
+    this.setInactive()
+  }
+
   render () {
 
     const { active, empty, inputValue } = this.state
-    const { inputClassName, suggestionsClassName, suggestions } = this.props
+    const { inputClassName, suggestionsClassName, suggestions, onInactive, onActive } = this.props
 
     return (
       <div className='Address'>
         <Input
           className={inputClassName}
+          onBlur={this.setInactive}
           value={inputValue}
           complete={suggestions[0]}
           onKeyDown={this.handleKey}

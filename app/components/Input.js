@@ -68,7 +68,7 @@ class Input extends Component {
 
   render () {
 
-    const { onKeyDown, value, className = '' } = this.props
+    const { onKeyDown, value, className = '', onFocus, onBlur } = this.props
     const { left } = this.state
 
     return (
@@ -77,6 +77,7 @@ class Input extends Component {
         ref='input'
         type='search'
         value={value + (left || '')}
+        onBlur={onBlur}
         onKeyDown={this.onKeyDown}
         onChange={this.handleCaret} />
     )

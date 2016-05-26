@@ -96,8 +96,8 @@ class AddressBar extends Component {
       <div className='AddressBar'>
         <Like />
         <div className='input-content'>
-          <span className='https'>{https ? 'https://' : ''}</span>
           <Address
+            inactiveValue={formattedCurrent}
             inputClassName='Input'
             suggestionsClassName='Suggestions'
             suggestions={suggestions}
