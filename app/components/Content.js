@@ -95,6 +95,7 @@ class Content extends Component {
             address={address}
             addressFocus={addressFocus}
             active={active}
+            src={src}
             current={current}
             tabs={tabs}
             shortcut={shortcut} />

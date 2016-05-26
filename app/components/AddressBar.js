@@ -29,11 +29,6 @@ class AddressBar extends Component {
     edit: false,
   }
 
-  select = () => {
-    this.refs.input.focus()
-    this.refs.input.select()
-  }
-
   onChange = e => {
     const { value } = e.target
     const { dispatch } = this.props
@@ -47,36 +42,20 @@ class AddressBar extends Component {
     dispatch(emptySuggestions())
   }
 
-  submit = e => {
-    const { address, dispatch } = this.props
-    if (e.key === 'Enter') {
-      this.setState({ edit: false })
-      return dispatch(exec(address))
-    }
-  }
-
-  componentDidMount () {
-  
-    const { active, addressFocus, shortcut } = this.props
-
-    shortcut.on('address:focus', () => {
-      if (this.refs.input && active) {
-        this.select()
-      }
-    })
-
-    if (addressFocus && active) { this.select() }
-    
+  submit = value => {
+    const { dispatch } = this.props
+    this.setState({ edit: false })
+    return dispatch(exec(value))
   }
 
   render () {
 
-    const { address, dispatch, suggestions, current, tabs } = this.props
+    const { address, dispatch, suggestions, current, tabs, src } = this.props
     const { edit } = this.state
 
     const formattedCurrent = tabs[current].history[tabs[current].url]
     const https = !edit && formattedCurrent.indexOf('https') === 0
-  
+
     const formattedAddress =
       !edit ?
         formattedCurrent
@@ -97,7 +76,8 @@ class AddressBar extends Component {
         <Like />
         <div className='input-content'>
           <Address
-            inactiveValue={formattedCurrent}
+            onEnter={this.submit}
+            inactiveValue={src}
             inputClassName='Input'
             suggestionsClassName='Suggestions'
             suggestions={suggestions}

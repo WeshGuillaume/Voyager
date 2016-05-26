@@ -18,7 +18,7 @@ class Address extends Component {
 
   handleKey = e => {
     const { active } = this.state
-    const { suggestions } = this.props
+    const { suggestions, onEnter } = this.props
 
     if (e.key === 'ArrowUp') {
 
@@ -45,6 +45,11 @@ class Address extends Component {
         }) 
       }
     }
+
+    if (e.key === 'Enter') {
+      const { value } = e.target
+      onEnter(value)
+    }
   }
 
   onInputChange = value => {
@@ -66,14 +71,14 @@ class Address extends Component {
     this.setState({ inputValue: inactiveValue, empty: true, active: 0 })
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.setInactive()
   }
 
   render () {
 
     const { active, empty, inputValue } = this.state
-    const { inputClassName, suggestionsClassName, suggestions, onInactive, onActive } = this.props
+    const { inputClassName, suggestionsClassName, suggestions, inactiveValue } = this.props
 
     return (
       <div className='Address'>
