@@ -115,7 +115,7 @@ class Address extends Component {
         <Input
           className={inputClassName}
           onBlur={this.setInactive}
-          completeDidMatch={() => this.setState({ active: 0 })}
+          completeDidMatch={() => this.setState({ active: [ 0, 0 ] })}
           value={inputValue}
           complete={suggestions.length && suggestions[0].list[0]}
           onKeyDown={this.handleKey}

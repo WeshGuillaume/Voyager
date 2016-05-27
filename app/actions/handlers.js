@@ -9,12 +9,19 @@ export const urlHandler = createHandler({
   name: 'URL handler',
   exec (query, { redirect }) {
 
-    if (query
-        .trim()
-        .replace(/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/, '')
-        .length > 0) { return }
+    const urlRegex = /^(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})$/
+    const formatted = query.trim()
 
-    redirect(query)
+    const httpFormat = `http://${formatted}`
+
+    if (httpFormat.match(urlRegex)) {
+      redirect(httpFormat)
+      return true
+    }
+
+    if (!formatted.match(urlRegex)) { return false }
+
+    redirect(formatted)
     return true
   },
 })

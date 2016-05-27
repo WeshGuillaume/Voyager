@@ -13,21 +13,21 @@ class Suggestions extends Component {
     onClick(index)
   }
 
-  mouseEnter = index => e => {
+  mouseEnter = (group, index) => e => {
     const { onActiveChange } = this.props
-    onActiveChange(index)
+    onActiveChange([ group, index ])
   }
 
-  renderListItem = groupIsAcive => (item, index) => {
+  renderListItem = group => (item, index) => {
 
     const { active } = this.props
 
     return (
       <div
         onClick={this.handleClick(index)}
-        onMouseEnter={this.mouseEnter(index)}
+        onMouseEnter={this.mouseEnter(group, index)}
         key={index}
-        className={cx('item', { active: groupIsAcive && active[1] === index })}>
+        className={cx('item', { active: group === active[0] && active[1] === index })}>
         <span>{item}</span>
       </div>
     )
@@ -42,7 +42,7 @@ class Suggestions extends Component {
         className='group'
         key={index}>
         <span>{group.name}</span>
-        {group.list && group.list.map(this.renderListItem(index === active[0]))}
+        {group.list && group.list.map(this.renderListItem(index))}
       </div>
     )
   }
