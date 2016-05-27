@@ -47,7 +47,7 @@ export const goForward = () => (dispatch, getState) => {
   dispatch(updateAddress())
 }
 
-export const addTab = (query, toCurrent) => (dispatch, getState) => {
+export const addTab = query => (dispatch, getState) => {
 
   const add = createAction('ADD_TAB', tab => tab)
   const { tabs, shortcuts } = getState()

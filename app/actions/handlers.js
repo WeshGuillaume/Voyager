@@ -45,8 +45,12 @@ export const googleSearch = createHandler({
         .use(jsonp)
         .end((err, results) => {
           if (err) { reject(err) }
+
+          results.body[1].length = 5
+
           resolve({
             name: 'Google Search',
+            icon: 'http://images.dailytech.com/nimage/G_is_For_Google_New_Logo_Thumb.png',
             list: results.body[1],
           })
         })

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import cx from 'classnames'
 
 import { connect } from 'react-redux'
-import { updateLocation, updateTitle, updateAddress, updateFavicon, exec, goBack, goForward } from 'actions/tabs'
+import { addTab, updateLocation, updateTitle, updateAddress, updateFavicon, exec, goBack, goForward } from 'actions/tabs'
 
 import AddressBar from './AddressBar'
 import Webview from './Webview'
@@ -53,8 +53,10 @@ class Content extends Component {
 
   newWindow = e => {
   
+    const { dispatch } = this.props
     const { ipcRenderer } = window.require('electron')
-    ipcRenderer.send('popup', e.url)
+
+    return dispatch(addTab(e.url))
   }
 
   clickedLink = e => {

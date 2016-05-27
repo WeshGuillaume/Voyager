@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import cx from 'classnames'
+import { debounce } from 'lodash'
 
 import { updateAddress, exec} from 'actions/tabs'
 import { emptySuggestions, suggest } from 'actions/autocomplete'
@@ -25,6 +26,10 @@ if (process.env.BROWSER) {
 )
 class AddressBar extends Component {
 
+  updateSuggestions = debounce(value => {
+    this.props.dispatch(suggest(value))
+  }, 600)
+
   onChange = e => {
     const { value } = e.target
     const { dispatch } = this.props
@@ -32,7 +37,7 @@ class AddressBar extends Component {
     dispatch(updateAddress(value))
 
     if (value) {
-      return dispatch(suggest(value))
+      return this.updateSuggestions(value)
     }
 
     dispatch(emptySuggestions())

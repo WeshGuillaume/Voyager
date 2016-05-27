@@ -14,15 +14,13 @@
 
   .Suggestions {
     position: absolute;
-    width: 500px;
+    width: 499px;
   }
 
   .input {
     padding: 5px;
     border: none;
     width: 500px;
-
-    border: 1px solid #f0f0f0;
 
     &:focus {
       outline: none;

@@ -41,7 +41,10 @@ class Suggestions extends Component {
       <div
         className='group'
         key={index}>
-        <span>{group.name}</span>
+        <div className='group-title'>
+          {group.icon && <img src={group.icon} width={15} />}
+          <span>{group.name}</span>
+        </div>
         {group.list && group.list.map(this.renderListItem(index))}
       </div>
     )

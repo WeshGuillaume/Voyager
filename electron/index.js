@@ -5,7 +5,7 @@ const { ipcMain } = require('electron')
 const createClientListener = (event, callback) =>
   ipcMain.on(event, callback)
 
-createClientListener('popup', (_, url) => createWindow({
+createClientListener('popup', (_, url) => createWindow(url, {
   width: 600,
   height: 600,
   titleBarStyle: 'default',

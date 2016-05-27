@@ -22,6 +22,5 @@ export const createSuggestionsFinder = (handlers, functions) => query => {
       .map(handler => handler.suggest(query))
 
   return Promise.all(results)
-    .then(result => console.log(result) || result)
     .catch(e => console.log(e))
 }
