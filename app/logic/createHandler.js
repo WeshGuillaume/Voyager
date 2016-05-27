@@ -1,8 +1,4 @@
 
-const defaults = {
-  version: '0.0.1',
-}
-
 export const createHandler = (permissions, description) => actions => {
 
   const functions = Object.keys(permissions).reduce((p, c) =>
@@ -11,6 +7,9 @@ export const createHandler = (permissions, description) => actions => {
   return Object.assign(
     query => description.exec(query, functions),
     {
+      suggest: description.suggest
+        ? query => description.suggest(query, functions)
+        : null,
       description,
       permissions,
     }

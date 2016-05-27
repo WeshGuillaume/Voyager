@@ -10,6 +10,7 @@ class Input extends Component {
 
   state = {
     left: null,
+    focus: false,
   }
 
   addComplete = e => {
@@ -66,6 +67,19 @@ class Input extends Component {
     onKeyDown(e)
   }
 
+  handleClick = e => {
+    if (!this.state.focus) {
+      e.target.select()
+    }
+    this.setState({ focus: true })
+  }
+
+  onBlur = e => {
+    const { onBlur } = this.props
+    this.setState({ focus: false })
+    onBlur(e)
+  }
+
   render () {
 
     const { onKeyDown, value, className = '', onFocus, onBlur } = this.props
@@ -75,9 +89,10 @@ class Input extends Component {
       <input
         className={`Input ${className}`}
         ref='input'
+        onClick={this.handleClick}
         type='search'
         value={value + (left || '')}
-        onBlur={onBlur}
+        onBlur={this.onBlur}
         onKeyDown={this.onKeyDown}
         onChange={this.handleCaret} />
     )

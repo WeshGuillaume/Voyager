@@ -11,44 +11,69 @@ if (process.env.BROWSER) {
 class Address extends Component {
 
   state = {
-    active: 0,
+    active: [ 0, 0 ],
     inputValue: '',
     empty: true,
   }
 
   handleKey = e => {
-    const { active } = this.state
-    const { suggestions, onEnter } = this.props
+    const [ activeGroup, activeItem ] = this.state.active
+    const { suggestions, onSubmit } = this.props
 
     if (e.key === 'ArrowUp') {
 
       const { value } = e.target
-      const isActive = active === 0 ? suggestions.length - 1 : active - 1
+      let nextActiveGroup, nextActiveItem
 
-      if (suggestions.length && value) {
-        this.setState({
-          active: isActive,
-          inputValue: suggestions[isActive]
-        })
+      if (activeItem === 0) {
+
+        nextActiveGroup = activeGroup === 0
+          ? suggestions.length - 1
+          : activeGroup - 1
+
+        const { list } = suggestions[nextActiveGroup]
+        nextActiveItem = list.length - 1
+
+      } else {
+        
+        nextActiveGroup = activeGroup
+        nextActiveItem = activeItem - 1
       }
+
+      this.setState({
+        inputValue: suggestions[nextActiveGroup].list[nextActiveItem],
+        active: [ nextActiveGroup, nextActiveItem ]
+      })
     }
 
     if (e.key === 'ArrowDown') {
 
-      const isActive = active === suggestions.length - 1 ? 0 : active + 1
       const { value } = e.target
+      let nextActiveGroup, nextActiveItem
 
-      if (suggestions.length && value) {
-        this.setState({
-          active: isActive,
-         inputValue: suggestions[isActive],
-        }) 
+      if (activeItem === suggestions[activeGroup].list.length - 1) {
+
+        nextActiveGroup = activeGroup === suggestions.length - 1
+          ? 0
+          : activeGroup + 1
+
+        nextActiveItem = 0
+
+      } else {
+        
+        nextActiveGroup = activeGroup
+        nextActiveItem = activeItem + 1
       }
+
+      this.setState({
+        inputValue: suggestions[nextActiveGroup].list[nextActiveItem],
+        active: [ nextActiveGroup, nextActiveItem ]
+      })
     }
 
     if (e.key === 'Enter') {
       const { value } = e.target
-      onEnter(value)
+      onSubmit(value)
     }
   }
 
@@ -68,7 +93,12 @@ class Address extends Component {
 
   setInactive = () => {
     const { inactiveValue } = this.props
-    this.setState({ inputValue: inactiveValue, empty: true, active: 0 })
+    this.setState({ inputValue: inactiveValue, empty: true, active: [ 0, 0 ] })
+  }
+
+  handleSuggestionsClick = index => {
+    const { onSubmit, suggestions } = this.props
+    onSubmit(suggestions[active])
   }
 
   componentWillMount () {
@@ -85,14 +115,17 @@ class Address extends Component {
         <Input
           className={inputClassName}
           onBlur={this.setInactive}
+          completeDidMatch={() => this.setState({ active: 0 })}
           value={inputValue}
-          complete={suggestions[0]}
+          complete={suggestions.length && suggestions[0].list[0]}
           onKeyDown={this.handleKey}
           onChange={this.onInputChange} />
           {!empty && <Suggestions
             className={suggestionsClassName}
+            onActiveChange={active => this.setState({ active })}
             active={active}
-            list={suggestions}/>}
+            onClick={this.handleSuggestionsClick}
+            groups={suggestions}/>}
       </div>
     )
   }

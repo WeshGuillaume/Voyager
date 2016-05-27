@@ -8,21 +8,52 @@ if (process.env.BROWSER) {
 
 class Suggestions extends Component {
 
+  handleClick = index => e => {
+    const { onClick } = this.props
+    onClick(index)
+  }
+
+  mouseEnter = index => e => {
+    const { onActiveChange } = this.props
+    onActiveChange(index)
+  }
+
+  renderListItem = groupIsAcive => (item, index) => {
+
+    const { active } = this.props
+
+    return (
+      <div
+        onClick={this.handleClick(index)}
+        onMouseEnter={this.mouseEnter(index)}
+        key={index}
+        className={cx('item', { active: groupIsAcive && active[1] === index })}>
+        <span>{item}</span>
+      </div>
+    )
+  }
+
+  renderGroup = (group, index) => {
+
+    const { active } = this.props
+
+    return (
+      <div
+        className='group'
+        key={index}>
+        <span>{group.name}</span>
+        {group.list && group.list.map(this.renderListItem(index === active[0]))}
+      </div>
+    )
+  }
+
   render () {
   
-    const { list, active, className = '' } = this.props
+    const { groups, className = '' } = this.props
 
     return (
       <div className={`Suggestions ${className}`}>
-        {list && list.map((item, index) => {
-          return (
-            <div
-              key={index}
-              className={cx('item', { active: active === index })}>
-              <span>{item}</span>
-            </div>
-          )
-        })}
+        {groups.map(this.renderGroup)}
       </div>
     )
   }

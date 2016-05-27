@@ -1,18 +1,12 @@
 
 import { createAction } from 'redux-actions'
-import { createFinder } from 'logic/exec'
+import { createExecFinder } from 'logic/exec'
 import * as handlers from './handlers'
+import { execFunctions } from 'actions/std-functions'
 
 export const exec = query => dispatch => {
-
-  const functions = {
-    redirect: url => dispatch(updateLocation(url)),
-  }
-
-  const finder = createFinder(handlers, functions)
-
+  const finder = createExecFinder(handlers, execFunctions(dispatch))
   finder(query)
-
 }
 
 export const goBack = () => dispatch => {

@@ -65,8 +65,6 @@ class Webview extends Component {
       src,
     } = this.props
 
-    console.log(`Rendering ${src}`)
-
     return (
       <webview
         className={className}

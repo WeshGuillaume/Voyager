@@ -2,20 +2,17 @@
 import { createAction } from 'redux-actions'
 import fetch from 'superagent'
 import jsonp from 'superagent-jsonp'
+import { createSuggestionsFinder } from 'logic/exec'
+import * as handlers from './handlers'
+import { suggestFunctions } from 'actions/std-functions'
 
-export const updateSuggestions = query => dispatch => {
+export const suggest = query => dispatch => {
 
-  const setSuggestion = createAction('SET_SUGGESTIONS', item => item)
-  if (!query) { return }
-
-  fetch
-    .get(`http://clients1.google.com/complete/search?jsonhl=en&output=toolbar&client=firefox&q=${query}`)
-    .use(jsonp)
-    .end((err, results) => {
-      if (err) { return console.log(err) }
-
-      dispatch(setSuggestion(results.body[1]))
-    })
+  const setSuggestions = createAction('SET_SUGGESTIONS', groups => groups)
+  const finder = createSuggestionsFinder(handlers, suggestFunctions(dispatch))
+  finder(query)
+    .then(groups => dispatch(setSuggestions(groups)))
+    .catch(e => console.log(e))
 }
 
 export const emptySuggestions = createAction('EMPTY_SUGGESTIONS')

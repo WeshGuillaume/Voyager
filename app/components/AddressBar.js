@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 
 import { updateAddress, exec} from 'actions/tabs'
-import { updateSuggestions, emptySuggestions } from 'actions/autocomplete'
+import { emptySuggestions, suggest } from 'actions/autocomplete'
 
 import Input from './Input'
 import Like from './Like'
@@ -17,17 +17,13 @@ if (process.env.BROWSER) {
 
 @connect(
   state => ({
-    suggestions: state.autocomplete.suggestions,
+    suggestions: state.autocomplete.groups,
     tabs: state.tabs.tabs,
     current: state.tabs.current,
     shortcut: state.shortcuts.emitter,
   })
 )
 class AddressBar extends Component {
-
-  state = {
-    edit: false,
-  }
 
   onChange = e => {
     const { value } = e.target
@@ -36,7 +32,7 @@ class AddressBar extends Component {
     dispatch(updateAddress(value))
 
     if (value) {
-      return dispatch(updateSuggestions(value))
+      return dispatch(suggest(value))
     }
 
     dispatch(emptySuggestions())
@@ -44,44 +40,24 @@ class AddressBar extends Component {
 
   submit = value => {
     const { dispatch } = this.props
-    this.setState({ edit: false })
     return dispatch(exec(value))
   }
 
   render () {
 
     const { address, dispatch, suggestions, current, tabs, src } = this.props
-    const { edit } = this.state
-
-    const formattedCurrent = tabs[current].history[tabs[current].url]
-    const https = !edit && formattedCurrent.indexOf('https') === 0
-
-    const formattedAddress =
-      !edit ?
-        formattedCurrent
-        .replace('https://', '')
-        .replace('http://', '') :
-      address
-
-      /*
-       *
-          <span className='https'>{https ? 'https://' : ''}</span>
-          <Input
-            suggestions={suggestions}
-            onChange={value => dispatch(updateSuggestions(value))} />
-       */
 
     return (
       <div className='AddressBar'>
         <Like />
         <div className='input-content'>
           <Address
-            onEnter={this.submit}
+            onSubmit={this.submit}
             inactiveValue={src}
             inputClassName='Input'
             suggestionsClassName='Suggestions'
             suggestions={suggestions}
-            onChange={value => dispatch(updateSuggestions(value))}/>
+            onChange={value => dispatch(suggest(value))}/>
         </div>
       </div>
     )
