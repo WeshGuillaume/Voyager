@@ -1,5 +1,5 @@
 
-# Voyager
+# Voyager deprecated
 
 # TODO
  - [ ] integrate a proper autocomplete library
